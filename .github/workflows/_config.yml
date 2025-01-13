@@ -2,3 +2,5 @@
 title: PicLab
 description: "A powerful image processing tool for uploading and editing images"
 url: "https://simonlee2216.github.io"  
+
+theme: jekyll-theme-primer
