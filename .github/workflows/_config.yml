@@ -1,0 +1,30 @@
+# Site settings
+title: PicLab
+description: "A powerful image processing tool for uploading and editing images"
+url: "https://simonlee2216.github.io"  
+
+# Theme settings
+theme: jekyll-theme-primer
+
+# GitHub metadata (optional, but useful for GitHub Pages)
+github:
+  repository: simonlee2216/piclab
+
+# Plugins
+plugins:
+  - jekyll-seo-tag
+  - jekyll-github-metadata
+  - jekyll-sitemap
+  - jekyll-paginate
+
+# SEO Settings
+seo:
+  title: PicLab
+  description: "A powerful image processing tool for uploading and editing images"
+
+
+# Exclude certain files and directories from being processed
+exclude:
+  - README.md
+  - node_modules/
+  - myenv/
