@@ -1,0 +1,119 @@
+/gallery.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery</title>
+    <script src="js/authUtils.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .gallery-container {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 1000px;
+            text-align: center;
+        }
+        .gallery-container h2 {
+            margin-bottom: 20px;
+        }
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        .image-gallery img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        .alert {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="gallery-container">
+        <h2>Gallery</h2>
+
+        <!-- Error message container -->
+        <div class="alert" id="error-message"></div>
+
+        <!-- Image gallery display -->
+        <div class="image-gallery" id="image-gallery"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchWithAuth('/gallery', { method: 'GET' })
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403) {
+                        showError('Your session has expired. Please log in again.');
+                        setTimeout(() => {
+                            window.location.href = '/login'; // Redirect to login
+                        }, 3000); // Redirect after 3 seconds for better UX
+                    } else {
+                        showError('An error occurred while fetching the gallery. Please try again later.');
+                    }
+                    throw new Error('Failed to fetch gallery data.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    // If the token is invalid or expired, redirect to login
+                    showError('Your session has expired. Please log in again.');
+                } else {
+                    renderGallery(data);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showError('An error occurred while fetching the gallery. Please try again later.');
+            });
+    
+        });
+
+        function showError(message) {
+            const errorElement = document.getElementById('error-message');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+
+        function renderGallery(data) {
+            const galleryContainer = document.getElementById('image-gallery');
+            galleryContainer.innerHTML = ''; // Clear previous gallery items
+
+            if (data.images && data.images.length > 0) {
+                data.images.forEach(image => {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = image.url; 
+                    galleryContainer.appendChild(imgElement);
+                });
+            } else {
+                showError('No images found.');
+            }
+        }
+    </script>
+
+</body>
+</html>
