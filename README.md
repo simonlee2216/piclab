@@ -1,7 +1,7 @@
 # PicLab - Image Processing and Gallery Management
 
 ## Overview
-PicLab is a versatile image processing service that allows users to upload, preview, and process images. With a variety of built-in image editing features such as resizing, cropping, rotating, and adjusting brightness/contrast, PicLab provides a user-friendly way to manage and modify your images. In addition, users can create and manage image galleries with ease.
+PicLab is a versatile image processing service that allows users to upload, preview, and process images. With a variety of built-in image editing features such as resizing, cropping, rotating, and adjusting brightness/contrast, PicLab provides a user-friendly way to manage and modify your images. In addition, users can create and manage image galleries with ease. 
 
 ## Features
 - **Image Upload**: Upload images directly to the platform for processing.
@@ -19,3 +19,9 @@ PicLab is a versatile image processing service that allows users to upload, prev
 - **Backend**: Python, Flask
 - **Database**: PostgreSQL for image metadata storage
 - **Image Processing**: Pillow, OpenCV
+
+## Link to Project
+[PicLab]((https://piclab.glitch.me/))
+example user: testuser1
+pw: 1111
+
