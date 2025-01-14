@@ -1,7 +1,7 @@
 import os
 import cv2
 import numpy as np
-from flask import Flask, jsonify, request, send_from_directory, render_template
+from flask import Flask, jsonify, request, send_from_directory, render_template, url_for
 from flask_cors import CORS
 from sqlalchemy import Integer, ForeignKey
 from flask_sqlalchemy import SQLAlchemy
@@ -125,50 +125,29 @@ def login_page():
   
 def verify_token(token):
     try:
-        # Decode the token using the decode_token function
         decoded_token = decode_token(token)
-        return decoded_token  # Return the decoded token data
+        return decoded_token  
 
     except JWTDecodeError as e:
-        # This will handle invalid tokens or expired tokens
         raise Exception(f"Token error: {str(e)}")
 
-# @app.before_request
-# def log_request():
-#     print("Request Headers:", request.headers)
+@app.route('/gallery')
+def gallery_page():
+        return render_template('gallery.html')
+  
+@app.route('/api/gallery', methods=['GET'])
+def get_gallery():
+    try:
+        images = ImageMetadata.query.all()
 
-@app.route('/gallery', methods=['GET'])
-@jwt_required
-def gallery():
-    auth_header = request.headers.get('Authorization')
-    print(auth_header)
-    current_user_id = get_jwt_identity()
-    print(f"Authenticated user: {current_user_id}")
+        image_data = [{"url": url_for('uploaded_file', filename=image.filename)} for image in images]
 
-    # Fetch images related to the current user from the database
-    images = ImageMetadata.query.filter_by(user_id=current_user_id).all()
+        return jsonify({"images": image_data})
 
-    if not images:
-        return jsonify({"msg": "No images found for the user"}), 404  # Return 404 if no images are found
-
-    # Prepare the gallery data with relevant information
-    gallery_data = {
-        "images": [
-            {
-                "id": image.id,
-                "filename": image.filename,
-                "url": f"/uploads/{image.filename}",  # Correctly build the URL for image display
-                "size": image.size,
-                "format": image.format
-            }
-            for image in images
-        ]
-    }
-
-    return jsonify(gallery_data), 200
-
-
-# Check if the file is allowed
+    except Exception as e:
+        print(f"Error fetching gallery data: {str(e)}")
+        return jsonify({"error": "Error fetching gallery data"}), 500
+      
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
@@ -390,26 +369,6 @@ def perspective_transform(filename):
 
     return jsonify({'message': f'Perspective transformation applied to {filename}', 'filename': f"perspective_{filename}"}), 200
 
-
-# View uploaded images metadata
-@app.route('/viewimages', methods=['GET'])
-@jwt_required  # Ensure the user is authenticated
-def view_images():
-    current_user_id = get_jwt_identity() 
-    user = User.query.get(current_user_id)
-    
-    images = ImageMetadata.query.filter_by(user_id=user.id).all()
-    
-    if not images:
-        return jsonify({'message': 'No images uploaded yet'}), 404
-    
-    # Format and return the image metadata as a list of dictionaries
-    return jsonify([{
-        'id': image.id,
-        'filename': image.filename,
-        'size': image.size,
-        'format': image.format
-    } for image in images]), 200
 
 # Route to serve uploaded images with download option
 @app.route('/uploads/<filename>', methods=['GET'])
