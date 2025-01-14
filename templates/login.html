@@ -1,213 +1,174 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
+    <script src="/static/js/authUtils.js"></script>
     <style>
-        /* Global Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      /* Global Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(to bottom, #e0eafc, #cfdef3);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
+      body {
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        background: linear-gradient(to bottom, #e0eafc, #cfdef3);
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
 
-        /* Header Styles */
-        header {
-            width: 100%;
-            background-color: #24292f;
-            color: #fff;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 100;
-        }
+      /* Header Styles */
+      header {
+        width: 100%;
+        background-color: #24292f;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 100;
+      }
 
-        header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-        }
+      header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+      }
 
-        /* Form Styles */
-        form {
-            max-width: 360px;
-            margin: 0 auto;
-            padding: 30px;
-            background-color: #fff;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            transition: box-shadow 0.3s ease-in-out;
-        }
+      /* Form Styles */
+      form {
+        max-width: 360px;
+        margin: 0 auto;
+        padding: 30px;
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        transition: box-shadow 0.3s ease-in-out;
+      }
 
-        form:hover {
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
-        }
+      form:hover {
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+      }
 
-        form label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 500;
-        }
+      form label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: 500;
+      }
 
-        form input {
-            width: 100%;
-            padding: 12px 15px;
-            margin: 8px 0 20px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            font-size: 1rem;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
+      form input {
+        width: 100%;
+        padding: 12px 15px;
+        margin: 8px 0 20px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        font-size: 1rem;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      }
 
-        form input:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
-            outline: none;
-        }
+      form input:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
+        outline: none;
+      }
 
-        form button {
-            width: 100%;
-            padding: 12px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
+      form button {
+        width: 100%;
+        padding: 12px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
 
-        form button:hover {
-            background-color: #0056b3;
-            transform: translateY(-3px);
-        }
+      form button:hover {
+        background-color: #0056b3;
+        transform: translateY(-3px);
+      }
 
-        form button:active {
-            background-color: #004085;
-            transform: translateY(1px);
-        }
+      form button:active {
+        background-color: #004085;
+        transform: translateY(1px);
+      }
 
-        /* Alert Styles */
-        .alert {
-            margin-bottom: 20px;
-            padding: 10px;
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-            border-radius: 4px;
-            display: none;
-        }
+      /* Alert Styles */
+      .alert {
+        margin-bottom: 20px;
+        padding: 10px;
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+        border-radius: 4px;
+        display: none;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <h1>Login</h1>
+      <h1>Login</h1>
     </header>
 
     <main>
-        <div class="alert" id="error-message"></div>
-        <form id="login-form">
-            <label for="username">Username</label>
-            <input type="text" id="username" placeholder="Username" required>
-            <label for="password">Password</label>
-            <input type="password" id="password" placeholder="Password" required>
-            <button type="submit">Login</button>
-        </form>
+      <div class="alert" id="error-message"></div>
+      <form id="login-form">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Username" required />
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Password" required />
+        <button type="submit">Login</button>
+      </form>
     </main>
     <script>
-        function fetchWithAuth(url, options = {}) {
-            const token = localStorage.getItem('access_token');
-            console.log('Fetching with token:', token);
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
 
-            if (!token) {
-                console.warn('No token found. Redirecting to login...');
-                window.location.href = '/login';
+          const username = document.getElementById("username").value;
+          const password = document.getElementById("password").value;
+
+          console.log("Login form submitted with:", username, password);
+
+          fetch("/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username, password }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              const accessToken = data.access_token;
+
+              if (!accessToken) {
+                showError("Login failed. Please try again.");
                 return;
-            }
-
-            const headers = new Headers();
-            if (options.headers) {
-                for (const [key, value] of Object.entries(options.headers)) {
-                    headers.append(key, value);
-                }
-            }
-            headers.append('Authorization', `Bearer ${token}`);
-            headers.append('Content-Type', 'application/json');
-
-            console.log('Headers:', headers);
-
-            try {
-                return fetch(url, {
-                    ...options,
-                    headers: headers,
-                });
-            } catch (error) {
-                console.error('Fetch failed:', error);
-                throw error; 
-            }
-        }
-
-        document.getElementById('login-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            console.log("Login form submitted with:", username, password);
-
-            fetch('/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password })
+              }
+              localStorage.setItem("access_token", accessToken);
+              window.location.href = "/gallery";
             })
-            .then(response => response.json())
-            .then(data => {
-                const accessToken = data.access_token;
-                
-                if (!accessToken) {
-                    showError('Login failed. Please try again.');
-                    return;
-                }
-                localStorage.setItem('access_token', accessToken);
-                fetchWithAuth('/gallery', { method: 'GET' })
-                .then(response => response.json())
-                .then(data => {
-                    localStorage.setItem('galleryData', JSON.stringify(data));
-                    window.location.href = '/gallery';
-                })
-                .catch(error => {
-                    console.error('Error fetching gallery:', error);
-                    showError('Failed to load the gallery. Please try again.');
-                });
-                window.location.href = '/gallery'; 
-            })
-            .catch(error => {
-                console.error('Login error:', error);
-                showError('Login failed. Please try again.');
+            .catch((error) => {
+              console.error("Login error:", error);
+              showError("Login failed. Please try again.");
             });
         });
 
-        function showError(message) {
-            const errorElement = document.getElementById('error-message');
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
-        }
+      function showError(message) {
+        const errorElement = document.getElementById("error-message");
+        errorElement.textContent = message;
+        errorElement.style.display = "block";
+      }
     </script>
-</body>
+  </body>
 </html>
