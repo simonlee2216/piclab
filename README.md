@@ -21,7 +21,7 @@ PicLab is a versatile image processing service that allows users to upload, prev
 - **Image Processing**: Pillow, OpenCV
 
 ## Link to Project
-[PicLab]((https://piclab.glitch.me/))
+[PicLab](https://piclab.glitch.me/)
 example user: testuser1
 pw: 1111
 
