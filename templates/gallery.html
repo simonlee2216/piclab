@@ -4,126 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gallery</title>
-    <script src="/static/js/authUtils.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f7fa;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .gallery-container {
-            background-color: #ffffff;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 1000px;
-            text-align: center;
-        }
-
-        .gallery-container h2 {
-            font-size: 1.8rem;
-            color: #333;
-            margin-bottom: 1rem;
-        }
-
-        .alert {
-            margin-bottom: 1rem;
-            padding: 1rem;
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-            border-radius: 5px;
-            display: none;
-            text-align: left;
-        }
-
-        .image-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        .image-gallery img {
-            width: 100%;
-            height: auto;
-            border-radius: 6px;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .image-gallery img:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        @media (max-width: 600px) {
-            .gallery-container {
-                padding: 1.5rem;
-            }
-
-            .image-gallery {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="/static/css/gallerystyle.css">
 </head>
 <body>
-    <div class="gallery-container">
-        <h2>Image Gallery</h2>
+    <div class="container">
+        <!-- Upload Section -->
+        <div class="upload-section">
+            <h3>Upload Your Photo</h3>
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+                <input type="file" name="file" accept="image/*" required>
+                <button type="submit">Upload Photo</button>
+            </form>
+        </div>
 
-        <div class="alert" id="error-message" role="alert"></div>
-
-        <div class="image-gallery" id="image-gallery" role="list"></div>
+        <!-- Gallery Section -->
+        <div class="gallery-container">
+            <h2>Image Gallery</h2>
+            <div class="image-gallery" id="image-gallery">
+                <!-- will be filled in -->
+            </div>
+            <div class="alert" id="error-message"></div> <!-- For error messages -->
+        </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            fetch('/api/gallery', { method: 'GET' })  
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch gallery data.');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.error) {
-                        showError('Error fetching gallery data.');
-                    } else {
-                        renderGallery(data.images);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showError('An unexpected error occurred. Please try again later.');
-                });
-        });
-
-        function showError(message) {
-            const errorElement = document.getElementById('error-message');
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
-        }
-
-        function renderGallery(images) {
-            const galleryContainer = document.getElementById('image-gallery');
-            galleryContainer.innerHTML = ''; // Clear previous gallery items
-
-            if (images && images.length > 0) {
-                images.forEach((image, index) => {
-                    const imgElement = document.createElement('img');
-                    imgElement.src = image.url;
-                    imgElement.alt = `Gallery image ${index + 1}`; // Add alt text for accessibility
-                    galleryContainer.appendChild(imgElement);
-                });
-            } else {
-                showError('No images found.');
-            }
-        }
-    </script>
+    <script src="/static/js/authUtils.js"></script>
+    <script src="/static/js/gallery.js"></script>
 </body>
 </html>
