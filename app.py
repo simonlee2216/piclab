@@ -136,14 +136,18 @@ def gallery_page():
         return render_template('gallery.html')
   
 @app.route('/api/gallery', methods=['GET'])
+@jwt_required
 def get_gallery():
     try:
-        images = ImageMetadata.query.all()
+        current_user_id = get_jwt_identity()
 
-        image_data = [{"url": url_for('uploaded_file', filename=image.filename)} for image in images]
+        images = ImageMetadata.query.filter_by(user_id=current_user_id).all()
+
+        image_data = [
+            {"url": url_for('uploaded_file', filename=image.filename)} for image in images
+        ]
 
         return jsonify({"images": image_data})
-
     except Exception as e:
         print(f"Error fetching gallery data: {str(e)}")
         return jsonify({"error": "Error fetching gallery data"}), 500
